@@ -6,7 +6,6 @@
     align-items:center;
     flex-direction: column;
 }
-
 .temperature__drgree{
        display: flex; 
        align-items: center;

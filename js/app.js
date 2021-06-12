@@ -2,7 +2,6 @@ import { URL } from './api.js'
 
 window.addEventListener('load', () => {
     //VERIFICANDO
-
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
             loadCoordsInTheApiWeather(position.coords.longitude, position.coords.latitude);
@@ -21,12 +20,20 @@ window.addEventListener('load', () => {
     }
     //SET IN DOM
     function setInDom(temp, desc, icon, zone) {
-        document.querySelector('.temperature__degree-content').textContent = temp;
+        let symbol = true;
+        document.querySelector('.temperature__degree-content').textContent = convertToDegToggle(temp, symbol);
         document.querySelector('.temperature__description').textContent = desc;
         document.querySelector('.location__timezone').textContent = zone;
+        document.querySelector('.temperature__degree-type').textContent = 'C';
+        const tempClickable = document.querySelector('.temperature__drgree');
+        tempClickable.addEventListener('click', () => {
+            document.querySelector('.temperature__degree-content').textContent = convertToDegToggle(temp, !symbol);
+            symbol = !symbol;
+            document.querySelector('.temperature__degree-type').textContent = symbol ? 'C' : 'F';
+
+        })
         setIconWeather(icon, document.querySelector('.location__icon'));
     }
-
     //SET ICONS 
     function setIconWeather(icon, iconID) {
         const skycons = new Skycons({ color: "  white" });
@@ -34,11 +41,11 @@ window.addEventListener('load', () => {
         skycons.play()
         return skycons.set(iconID, Skycons[currentIcon])
     }
-
-    function convertToCelsius(temp) {
-        return new "";
+    //HELPERS
+    function convertToDegToggle(temp, symbol) {
+        if (symbol) return Math.floor(5 / 9 * (temp - 32));
+        else return Math.floor(9 / 5 * (temp + 32));
     }
 
 
-    //EVENTS 
 })
